@@ -178,11 +178,18 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 */
 	@Nullable
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
+		//解决循环依赖的一大串方法
+		// this.singletonObjects 放beanName 和实例的集合
 		Object singletonObject = this.singletonObjects.get(beanName);
+		//isSingletonCurrentlyInCreation 这个方法判断当前bean是否正在创建。
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
 			synchronized (this.singletonObjects) {
+				//earlySingletonObjects 创建了一半的实例。 比如没有完成依赖注入的对象。
+				//在A类里面有b,c类， b,c类依赖了a类。此时 earlySingletonObjects ，b注册时会从singletonFactories找到a
+				//放入earlySingletonObjects， 此后c可以从earlySingletonObjects中找到a ,提高效率。
 				singletonObject = this.earlySingletonObjects.get(beanName);
 				if (singletonObject == null && allowEarlyReference) {
+					//从单利工厂中获取bean
 					ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 					if (singletonFactory != null) {
 						singletonObject = singletonFactory.getObject();
@@ -343,6 +350,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * @see #isSingletonCurrentlyInCreation
 	 */
 	protected void beforeSingletonCreation(String beanName) {
+		//这里校验加添加singletonsCurrentlyInCreation 正在创建实例
 		if (!this.inCreationCheckExclusions.contains(beanName) && !this.singletonsCurrentlyInCreation.add(beanName)) {
 			throw new BeanCurrentlyInCreationException(beanName);
 		}

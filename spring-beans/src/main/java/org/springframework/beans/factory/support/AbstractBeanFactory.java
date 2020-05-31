@@ -241,7 +241,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	@SuppressWarnings("unchecked")
 	protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
 			@Nullable final Object[] args, boolean typeCheckOnly) throws BeansException {
-
+		//转换name
+		// 去掉factoryBeanName的前缀&。
+		// 第二步取别名。取到底
 		final String beanName = transformedBeanName(name);
 		Object bean;
 
@@ -318,8 +320,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 				// Create bean instance.
 				if (mbd.isSingleton()) {
+					//正儿八经获取实例地方，单利的
 					sharedInstance = getSingleton(beanName, () -> {
 						try {
+							//开始创建实例
 							return createBean(beanName, mbd, args);
 						}
 						catch (BeansException ex) {

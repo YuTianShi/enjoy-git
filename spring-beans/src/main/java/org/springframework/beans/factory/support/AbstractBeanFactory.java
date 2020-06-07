@@ -241,9 +241,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	@SuppressWarnings("unchecked")
 	protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
 			@Nullable final Object[] args, boolean typeCheckOnly) throws BeansException {
-		//è½¬æ¢name
-		// åŽ»æŽ‰factoryBeanNameçš„å‰ç¼€&ã€‚
-		// ç¬¬äºŒæ­¥å–åˆ«åã€‚å–åˆ°åº•
+		//×ª»»name
+		// È¥µôfactoryBeanNameµÄÇ°×º&¡£
+		// µÚ¶þ²½È¡±ðÃû¡£È¡µ½µ×
 		final String beanName = transformedBeanName(name);
 		Object bean;
 
@@ -320,10 +320,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 				// Create bean instance.
 				if (mbd.isSingleton()) {
-					//æ­£å„¿å…«ç»èŽ·å–å®žä¾‹åœ°æ–¹ï¼Œå•åˆ©çš„
+					//Õý¶ù°Ë¾­»ñÈ¡ÊµÀýµØ·½£¬µ¥ÀûµÄ
 					sharedInstance = getSingleton(beanName, () -> {
 						try {
-							//å¼€å§‹åˆ›å»ºå®žä¾‹
+							//¿ªÊ¼´´½¨ÊµÀý
 							return createBean(beanName, mbd, args);
 						}
 						catch (BeansException ex) {
